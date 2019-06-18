@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../styles/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+    <script src="../helper/Leaflet.ImageOverlay.Rotated.js"></script>
+    <script src="../helper/leaflet-heat.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+</head>
+    
+<link rel="stylesheet" href="../styles/heatmap.css"/>
+
+<body>
+    <div>
+        <div id="mapid"></div>
+    </div>
+    <div style="overflow: hidden">
+        <div class="topControls">
+            <div class="navButtonContainer">
+                <img id="prevDay" class="navButtons" src="../icon/prev.svg"/>
+            </div>
+            <div class="navButtonContainer">
+                <img id="toggleIcon" class="navButtons" src="../icon/play.svg"/>
+            </div>
+            <div class="navButtonContainer">
+                <img id="nextDay" class="navButtons" src="../icon/next.svg"/>
+            </div>
+            <div class="navButtonContainer">
+                <span id="speed" class="navtext">1x</span>
+            </div>
+            <div class="navButtonContainer">
+                <img id="stepBackward" class="navButtons" src="../icon/skipback.svg"/>
+            </div>
+            <div class="navButtonContainer">
+                <img id="stepForward" class="navButtons" src="../icon/skipforward.svg"/>
+            </div>
+        </div>
+        <div class="eventBox">
+            <div class="eventTitle">
+                Tyre Expo Asia 2019, Day 1
+            </div>
+        </div>
+    </div>
+    <div> 
+        <div class="bottomControls">
+            <div class='bottomButtonContainer'>
+                <span class = slideText> Day: </span> &nbsp 
+                <input type="number" class= "inputBox" id="jumpDay" value=1 max=3 min=1>
+                &nbsp&nbsp&nbsp
+                <span class = slideText> Time: </span> &nbsp <input type="text" class= "inputBox" id="jumpTime" value = "0800">
+            </div>
+            <div class="checkButtonContainer">
+                <button id="jump" class="check">Check</button>
+            </div>
+        </div>
+        <div class='sliderContainer'>
+            <input type="range" min="0" max="1742" value="0" step="1" class="slider" id="slider">
+        </div>    
+    </div>
+</body>
+    
+
+    <script src="DataSet.js"></script>
+    <script> //map initialisation
+        var date = 19;
+        var hour = 8;
+        var min = 0;
+
+        var point1 = L.latLng(1.334227, 103.955138),
+		    point3 = L.latLng(1.331125, 103.955138),
+            point2 = L.latLng(1.334227, 103.961874);
+            bounds = L.latLngBounds(point2, point3);
+
+        var mymap = L.map('mapid',{
+            center: [1.332469, 103.957427],
+            zoom: 18.42,
+            // maxBounds: bounds
+        });
+
+        mymap.setMaxBounds(bounds);
+
+        L.tileLayer('', {
+                'attribution': 'Map data &copy; OpenStreetMap contributors',
+                maxZoom: 22,
+                minZoom: 18.4,
+        }).addTo(mymap);
+
+        // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        //     maxZoom: 22,
+        //     minZoom: 17.5,
+        //     id: 'mapbox.streets',
+        //     accessToken: 'pk.eyJ1IjoiZXVnZW5leWwiLCJhIjoiY2p3azluNnliMG82cTN5cDYxaHFuYnhpNSJ9.bcd9AxfVztbmUqER-SCqnA'
+        // }).addTo(mymap);
+        
+        // mymap.MaxBounds(bounds);
+        // var marker1 = L.marker(point1, {draggable: true} ).addTo(mymap),
+		//     marker2 = L.marker(point2, {draggable: true} ).addTo(mymap),
+        //     marker3 = L.marker(point3, {draggable: true} ).addTo(mymap);
+        
+        var overlay = L.imageOverlay.rotated("../icon/Map.svg", point1, point2, point3, {
+			opacity: 1,
+			interactive: true,
+			attribution: "Floor plan of tyreexpo"
+        }).addTo(mymap);
+        
+        //For repositioning the image overlay
+        // function repositionImage() {
+		// 	overlay.reposition(marker1.getLatLng(), marker2.getLatLng(), marker3.getLatLng());
+		// };
+		
+		// marker1.on('drag dragend', repositionImage);
+		// marker2.on('drag dragend', repositionImage);
+        // marker3.on('drag dragend', repositionImage);
+        
+        //For getting specific/center coordinates
+        // var popup = L.popup();
+        // function onMapClick(e) {
+        //     alert(mymap.getCenter());
+        //     popup
+        //         .setLatLng(e.latlng)
+        //         .setContent("You clicked the map at " + e.latlng.toString())
+        //         .openOn(mymap);
+        // }
+
+        // mymap.on('click', onMapClick);
+        
+        var dataSet = [];
+        var alleyCount = [0,0,0,0,0,0,0,0];
+
+        parsedData.forEach(function(data) {
+            let testDate = data.time.getDate();
+            let testHour = data.time.getHours();
+            let testMin = data.time.getMinutes();
+            if (date == testDate && hour == testHour && min == testMin){
+                alleyCount[data.alley] += data.count;
+                for (var i = 0; i < data.count; i++) {
+                    dataSet.push(data.coordinates);
+                }
+            }
+        });
+
+        var heat = L.heatLayer(dataSet, {radius: 95, maxZoom:21}).addTo(mymap);
+        var popupList = [];
+        for (var i = 0; i < 8; i++) {
+            var popup = L.popup({
+                autoClose : false,
+                closeOnEscapeKey : false,
+                closeOnClick: false,
+                closeButton: false
+                }
+            );
+            popup.setLatLng(L.latLng([alleyCoordinates[i].lat,alleyCoordinates[i].long]))
+                .setContent("<b>" + alleyCount[i] + "</b>")
+                .openOn(mymap);
+            popupList.push(popup);
+        }
+    </script>
+    <script> //UI features
+        function update() {
+            var totalMinutes = parseInt(slider.value);
+            var day = Math.floor(totalMinutes/601) + 1;
+            var dayMinute = totalMinutes%601;
+            date = day + 18;
+            hour = Math.floor(dayMinute/60) + 8;
+            min = dayMinute%60;
+            if (min<10) {
+                smin = "0" + min;
+            } else {
+                smin = min.toString();
+            }
+            if (hour<10) {
+                shour = "0" + hour;
+            } else {
+                shour = hour.toString();
+            }
+            jumpDay.value = day;
+            jumpTime.value = shour+smin;
+
+            dataSet = [];
+            alleyCount = [0,0,0,0,0,0,0,0];
+            parsedData.forEach(function(data) {
+                let testDate = data.time.getDate();
+                let testHour = data.time.getHours();
+                let testMin = data.time.getMinutes();
+                if (date == testDate && hour == testHour && min == testMin){
+                    alleyCount[data.alley] += data.count;
+                    for (var i = 0; i < data.count; i++) {
+                        dataSet.push(data.coordinates);
+                    }
+                }
+            });
+            heat.setLatLngs(dataSet);
+            for (var i = 0; i < popupList.length; i++ ) {
+                popupList[i].setContent("<b>" + alleyCount[i] + "</b>");
+            }
+            $(".eventTitle").html("Tyre Expo Asia 2019, Day " + day);
+        }
+
+        var slider = document.getElementById("slider");
+        slider.oninput = update;
+        
+        var play = document.getElementById("toggleIcon");
+        var isPlaying = false;
+        var speed = 60;
+        function autoRun () {
+            if(isPlaying) {
+                slider.stepUp();
+                update();
+                if (slider.value == 1742) {
+                    isPlaying = false;
+                    document.getElementById("toggleIcon").src = "../icon/play.svg";
+                    popupList.forEach(function(element) {
+                    mymap.openPopup(element);
+                    });
+                }
+            }
+        }
+        var interval = setInterval(autoRun, speed);
+
+        play.onclick = function() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                document.getElementById("toggleIcon").src = "../icon/pause.svg";
+                popupList.forEach(function(element) {
+                    mymap.closePopup(element);
+                });
+            } else {
+                document.getElementById("toggleIcon").src = "../icon/play.svg";
+                popupList.forEach(function(element) {
+                    mymap.openPopup(element);
+                });
+            }
+        };
+        
+        var speed = document.getElementById("speed");
+        var currentMultiplier = 1;
+        speed.onclick = function() {
+            if (currentMultiplier  < 2) {
+                currentMultiplier += 0.5;
+                speed -= 15;
+            } else {
+                currentMultiplier = 0.5;
+                speed = 75;
+            }
+
+            clearInterval(interval);
+            interval = setInterval(autoRun, speed);
+            $("#speed").html(currentMultiplier + "x");
+        }
+
+        var stepForward = document.getElementById("stepForward");
+        var stepBackward = document.getElementById("stepBackward");
+        stepForward.onclick = function() {
+            slider.stepUp();
+            update();
+        }
+        stepBackward.onclick = function() {
+            slider.stepDown();
+            update();
+        }
+
+        var prevDay = document.getElementById("prevDay");
+        var nextDay = document.getElementById("nextDay");
+        prevDay.onclick = function() {
+            if (slider.value > 600 ) {
+                slider.stepDown(601)
+                update();
+            } else {
+                slider.value = 0;
+                update();
+            }
+        }
+        nextDay.onclick = function() {
+            if (slider.value < 1142) {
+                slider.stepUp(601);
+                update();
+            } else {
+                slider.value = 1742;
+                update();
+            }
+
+        }
+        prevDay.onmouseenter = function() {
+            prevDay.src = "../icon/hoverprev.svg";
+        }
+        prevDay.onmouseleave = function() {
+            prevDay.src = "../icon/prev.svg";
+        }
+        nextDay.onmouseenter = function() {
+            nextDay.src = "../icon/hovernext.svg";
+        }
+        nextDay.onmouseleave = function() {
+            nextDay.src = "../icon/next.svg";
+        }
+
+        var jump = document.getElementById("jump");
+        var jumpDay = document.getElementById("jumpDay");
+        var jumpTime = document.getElementById("jumpTime");
+
+        jump.onclick= function() {
+            let newDay = jumpDay.value;
+            let newTime = parseInt(jumpTime.value);
+            let newHour = Math.floor(newTime/100);
+            let newMin = newTime%100;
+            if (newDay <= 3 && newDay >= 1) {
+                if (newHour <= 18 && newHour >= 8) {
+                    if (newMin <= 59 && newMin >= 0) {
+                        slider.value = (newDay-1)*601 + (newHour-8)*60 + newMin;
+                        update();
+                    }
+                }
+            }
+        };
+    </script>
+</body>

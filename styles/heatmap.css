@@ -1,0 +1,185 @@
+#mapid { 
+    width: 1024px;
+    height: 586px;
+    margin-bottom: 0 !important;
+    overflow: hidden;
+}
+
+.timeControls {
+  padding: 0;
+  height: 73px;	
+  width: 1442px;	
+  background-color: #0F0F0F;
+}
+
+.topControls {	
+    height: 60px;	
+    width: 366px;	
+    background-color: #0F0F0F;
+    color: white;
+    float: left;
+}
+
+.navButtonContainer {
+    float: left;
+}
+
+.navButtonContainer:hover {
+    cursor: pointer;
+}
+
+.navButtons {
+    background-color: #0F0F0F;
+    height: 20px;
+    width: 20px;
+    padding: 20px;
+}
+
+#stepForward:active {
+    transition-timing-function: ease-in;
+    transition-timing-function: ease-out;
+    transition: 0.1s;
+    transform: rotate(70deg)
+}
+
+#stepBackward:active {
+    transition-timing-function: ease-in;
+    transition-timing-function: ease-out;
+    transition: 0.1s;
+    transform: rotate(-70deg)
+}
+
+.navtext {	
+    height: 20px;	
+    width: 20px;	
+    color: #FFFFFF;	
+    font-family: "Montserrat";
+    font-weight: 600;	
+    font-size: 17px;	
+    letter-spacing: -0.22px;	
+    line-height: 20px;
+    padding: 20px;
+    display: inline-block;
+}
+
+.eventBox {
+	height: 60px;
+	width: 658px;
+	opacity: 0.90;
+    background-color: #0F0F0F;
+    display: inline-block;
+    position: absolute;
+}
+
+.eventTitle {	
+    height: 33px;	
+    width: 344px;	
+	color: #FFFFFF;	
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 27px;	
+	letter-spacing: -0.63px;
+	line-height: 33px;
+    display: inline-block;
+    padding: 15px 387px 12px 27px;
+}
+
+.bottomControls {
+    height: 60px;	
+    width: 366px;	
+    background-color: #0F0F0F;
+    color: white;
+    float:left;
+}
+
+.bottomButtonContainer {
+    float: left;
+    padding: 16px 26px 16px 26px;
+}
+
+.slideText {
+    height: 16px;	
+    width: 26px;	
+    color: #FFFFFF;	
+    font-family: "Montserrat";
+    font-weight:600;
+    font-size: 13px;	
+    letter-spacing: -0.17px;	
+    line-height: 16px;
+    display: inline-block;
+    text-align: center;
+}
+
+.inputBox {
+	height: 24px;
+	width: 51px;
+	border: 1px solid #3A3A3A;
+    background-color: #1F1F1F;
+    color: #FFFFFF;
+    font-family: "Montserrat";
+    font-weight:600;
+    font-size: 13px;
+    letter-spacing: 1.3px;	
+    line-height: 16px;	
+    text-align: center;
+}
+
+.checkButtonContainer {
+    display: inline-block;
+    padding-top: 13px;
+}
+
+.check {
+    height: 34px;
+	width: 86px;
+    background-color: #0D6FFB;	
+    color: #FFFFFF;	
+    font-family: "Montserrat";
+    border: none;
+    border-radius: 3px;
+    font-weight:600;
+    font-size: 15px;	
+    letter-spacing: -0.19px;	
+    line-height: 19px;
+}
+
+.check:hover {
+    cursor: pointer;
+    background-color: #084EB1;
+}
+
+.check:active {
+  background-color: #063981;
+}
+
+.sliderContainer{
+    height: 60px;	
+    width: 658px;
+    background-color: #0F0F0F;
+    color: #1E2C3F;	
+    display: inline-block;
+    position: absolute;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 605px;
+  height: 3px;
+  border-radius: 16px;
+  background-color: #0D6FFB;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  margin: 26px 26px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%; 
+    background: #D8D8D8;
+    cursor: pointer;
+}
