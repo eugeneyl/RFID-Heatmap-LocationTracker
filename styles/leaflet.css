@@ -477,8 +477,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	color: #FFFFFF !important;
 	}
 .leaflet-popup-content {
-	margin: 5px 16px 6px 13px;
-	width: 7px !important;
+    margin: 6px -6px;
 	font-size: 17px;
 	font-family: "Montserrat" !important;
 	font-weight:600;
