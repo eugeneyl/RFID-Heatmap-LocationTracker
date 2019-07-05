@@ -1,0 +1,129 @@
+#mapWrapper { 
+    width: 1024px;
+    height: 586px;
+    margin-bottom: 0 !important;
+    overflow: hidden;
+    float: left;
+    position: relative;
+    /* border: 1px solid #aaa; */
+}
+
+#mapid {
+  width: 100%;
+  height: 100%;
+}
+
+#button-wrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.mode {
+  width: 77px;
+  height: 31px;
+  border-radius: 15.5px;
+  background: #F5F5F5;
+  border: 1px solid #707070;
+}
+
+#controlBox {
+  width: 338;
+  height: 586;
+  border: 1px solid #b3b3b3;
+  display: inline-block;
+  position: absolute;
+  overflow: auto;
+}
+
+.controlBoxText {
+  font-size: 15px;
+  font-family: "Montserrat";	
+  line-height: 19px;
+  color: #000000;
+}
+
+#attendeeID {
+  margin-left: 22px;
+}
+
+#attendeeName {
+  margin-left: 22px;
+}
+
+.nameText {
+  font-size: 16px;
+  font-family: "Montserrat";
+  line-height: 23px;
+  color: #000000;
+  text-transform: capitalize;
+}
+
+.idText {
+  font-size: 16px;
+  font-family: "Montserrat";
+  line-height: 23px;
+  color: #000000;
+}
+
+.summaryPanel {
+  padding: 4px 22px 16px;
+}
+
+.search {
+  position: relative;
+  color: #aaa;
+  font-size: 16px;
+  font-family: "Montserrat";
+  letter-spacing: -0.17px;
+}
+
+.search input {
+  width: 304px;
+  height: 40px;
+  background: #fcfcfc;
+  border: 1px solid #aaa;
+  font-family: "Montserrat";
+  letter-spacing: -0.17px;
+  border-radius: 5px;
+}
+
+.search input { text-indent: 32px;}
+.search .fa-search { 
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.search {
+  margin-top: 28px;
+  margin-left: 17px;
+}
+
+.recordsTable {
+  margin: 10px;
+}
+
+th, td {
+  padding: 4px;
+  text-align: left;
+  font-size: 15px;
+  border: 1px solid #707070;
+}
+
+th {
+  font-family: "Montserrat";
+  font-weight: 600;	
+  color: #A1A1A1;
+}
+
+td {
+  font-family: "Montserrat";
+  color: #000000;
+}
+
+.bodyrow:hover {
+  background-color: #D3D3D3;
+}

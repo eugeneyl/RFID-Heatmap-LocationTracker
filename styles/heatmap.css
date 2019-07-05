@@ -1,8 +1,37 @@
-#mapid { 
+/* #mapid { 
     width: 1024px;
     height: 586px;
     margin-bottom: 0 !important;
     overflow: hidden;
+} */
+
+#mapWrapper { 
+  width: 1024px;
+  height: 586px;
+  margin-bottom: 0 !important;
+  overflow: hidden;
+  position: relative;
+}
+
+#mapid {
+  width: 100%;
+  height: 100%;
+}
+
+#button-wrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.mode {
+  width: 77px;
+  height: 31px;
+  border-radius: 15.5px;
+  background: #F5F5F5;
+  border: 1px solid #707070;
 }
 
 .timeControls {
@@ -14,7 +43,7 @@
 
 .bottomControls {	
     height: 60px;	
-    width: 366px;	
+    width: 465px;	
     background-color: #0F0F0F;
     color: white;
     float: left;
@@ -32,8 +61,82 @@
     background-color: #0F0F0F;
     height: 20px;
     width: 20px;
-    margin: 20px;
+    margin: 20px 17px;
 }
+
+.toggleBox {
+    background-color: #0F0F0F;
+    height: 20px;
+    margin: 20px 18px;
+    float: left;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 20px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;;
+    background-color: #39393A;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #569BFF;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #569BFF;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+    border-style: solid;
+    border-color: #707070;
+    border-width: 1px;
+}
+  
+  .slider.round:before {
+    border-radius: 50%;
+    border-style: solid;
+    border-color: #707070;
+    border-width: 1px;
+  }
 
 #stepForward:active {
     transition-timing-function: ease-in;
@@ -64,7 +167,7 @@
 
 .eventBox {
 	height: 60px;
-	width: 496px;
+	width: 465px;
 	opacity: 0.90;
     background-color: #0F0F0F;
     float: left;
@@ -85,7 +188,7 @@
 
 .topControls {
     height: 60px;	
-    width: 528px;	
+    width: 559px;	
     background-color: #0F0F0F;
     opacity: 0.9;
     color: white;
@@ -93,21 +196,32 @@
     position: absolute;
 }
 
-.topButtonContainer {
+.ControlsContainer {
     float: left;
-    padding: 16px 26px 16px 26px;
+    padding: 16px 20px 16px 26px;
 }
 
+
 .slideText {
-    height: 16px;	
-    color: #FFFFFF;	
-    font-family: "Montserrat";
-    font-weight:600;
-    font-size: 13px;	
-    letter-spacing: -0.17px;	
-    line-height: 16px;
-    display: inline-block;
-    text-align: center;
+  height: 16px;	
+  color: #FFFFFF;	
+  font-family: "Montserrat";
+  font-weight:600;
+  font-size: 13px;	
+  letter-spacing: -0.17px;	
+  line-height: 16px;
+  display: inline-block;
+  text-align: center;
+}
+
+.slideTextContainer{
+  float:left;
+  padding: 5px 0px;
+}
+
+.intervalTextContainer{
+  float:left;
+  padding: 0px 0px;
 }
 
 .minText {
@@ -120,6 +234,17 @@
     line-height: 16px;
     display: inline-block;
     text-align: center;
+}
+
+.inputBoxContainer {
+  height: 26;
+  width: 60;
+  float:left;
+  color: #B9B9B9;	
+  font-family: "Montserrat";
+  letter-spacing: -0.17px;
+  font-size: 10px;
+  text-align: center;		
 }
 
 .inputBox {
@@ -166,39 +291,38 @@
 
 .sliderContainer{
     height: 60px;	
-    width: 658px;
+    width: 559px;
     background-color: #0F0F0F;
     color: #1E2C3F;	
     display: inline-block;
     position: absolute;
 }
 
-/* .slider {
-  -webkit-appearance: none;
-  width: 605px;
-  height: 3px;
-  border-radius: 16px;
-  background-color: #0D6FFB;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-  margin: 26px 26px;
-} */
-
 .sliderRange {
     -webkit-appearance: none;
-    width: 605px;
+    width: 507px;
     height: 3px;
     border-radius: 16px;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    margin: 26px 26px;
+    margin: 28px 26px;
   }
 
-/* .slider::-webkit-slider-thumb {
+/* .specificRange {
+  -webkit-appearance: none;
+  width: 507px;
+  height: 3px;
+  border-radius: 16px;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  margin: 28px 26px;
+}
+
+.specificRange::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 16px;
