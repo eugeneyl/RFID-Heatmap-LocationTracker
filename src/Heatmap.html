@@ -3,10 +3,11 @@
 <head>
     <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
     <meta charset="utf-8" />
+    <script>window.$ = window.jQuery = require('../helper/jquery-3.4.1.min.js');</script>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- <script src="https://code.jquery.com/jquery-1.8.0.min.js"></script> -->
-    <link rel="stylesheet" href="../jquery-ui/jquery-ui.css">
-    <script src="../jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="../helper/jquery-ui/jquery-ui.css">
+    <script src="../helper/jquery-ui/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../styles/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
         integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
@@ -14,13 +15,19 @@
     <script src="../helper/Leaflet.ImageOverlay.Rotated.js"></script>
     <script src="../helper/leaflet-heat.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <script>if (window.module) module = window.module;</script>
 </head>
 
 <link rel="stylesheet" href="../styles/heatmap.css" />
 
 <body>
     <div>
-        <div id="mapid"></div>
+        <div id = mapWrapper>
+            <div id="mapid"></div>
+            <div id="button-wrapper">
+                <input type="button" value="Tracker" class = "mode" onclick="window.location.href = 'LocationTracker.html';"/>
+            </div>
+        </div>
     </div>
     <div style="overflow: hidden; opacity:90%">
         <div class="eventBox">
@@ -28,19 +35,53 @@
                 Tyre Expo Asia 2019 | Day 1
             </div>
         </div>
-        <div class="topControls">
-            <div class='topButtonContainer'>
-                <span class=slideText> Day: </span> &nbsp
-                <input type="number" class="inputBox" id="jumpDay" value=1 max=3 min=1>
-                &nbsp&nbsp&nbsp
-                <span class=slideText> Time: </span> &nbsp <input type="text" class="inputBox" id="jumpTime"
-                    value="0800">
-                &nbsp&nbsp&nbsp
-                <span class=slideText> Intervals: </span> &nbsp <input type = "text" class="inputBox" id="interval"
-                    value="0"> <span class=minText>min</span>
+        <div class="topControls" id = "intervalControls">
+            <div class='ControlsContainer'>
+                <div class = "slideTextContainer">
+                    <span class=slideText> Start: </span> &nbsp;
+                </div>
+                <div class="inputBoxContainer">
+                    <input type="number" class="inputBox" id="intStartDay" value=1 max=3 min=1>
+                    <br/>
+                    Day
+                </div>
+                <div class="inputBoxContainer">
+                    <input type="text" class="inputBox" id="intStartTime"
+                        value="0800">
+                    <br/>
+                    Time
+                </div>
             </div>
-            <div class="checkButtonContainer">
-                <button id="jump" class="check">Check</button>
+            <div class='ControlsContainer'>
+                <div class = "slideTextContainer">
+                    <span class=slideText> End: </span> &nbsp;
+                </div>
+                <div class="inputBoxContainer">
+                    <input type="number" class="inputBox" id="intEndDay" value=1 max=3 min=1>
+                    <br/>
+                    Day
+                </div>
+                <div class="inputBoxContainer">
+                    <input type="text" class="inputBox" id="intEndTime" value="0800">
+                    <br/>
+                    Time
+                </div>
+            </div>
+            <div class='ControlsContainer'>
+                <div class = "intervalTextContainer">                
+                    <span class=slideText> Intervals: </span> &nbsp; <input type = "text" class="inputBox" id="interval"
+                        value="0"> <span class=minText>min</span>
+                </div>
+            </div>
+        </div>
+        <div class="topControls" id = "specificControls">
+            <div class='ControlsContainer'>
+                <span class=slideText> Day: </span> &nbsp;
+                <input type="number" class="inputBox" id="specDay" value=1 max=3 min=1>
+            </div>
+            <div class='ControlsContainer'>
+                <span class=slideText> Time: </span> &nbsp; <input type="text" class="inputBox" id="specTime"
+                    value="0800">
             </div>
         </div>
     </div>
@@ -64,21 +105,31 @@
             <div class="navButtonContainer">
                 <img id="stepForward" class="navButtons" src="../icon/skipforward.svg" title="Skip forward" />
             </div>
+            <div class="toggleBox">
+                <span class=slideText> Interval &nbsp;</span> 
+                <label class="switch">
+                    <input type="checkbox" id="intervalToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
         <div class='sliderContainer'>
-            <div class = "sliderRange" id="slider"></div>
-            <!-- <input type="range" min="0" max="1742" value="0" step="1" class="slider" id="slider"> -->
+            <div class = "sliderRange" id="intervalSlider"></div>
+            <div class = "sliderRange" id="specificSlider"></div>
         </div>
+        <!-- <div class='sliderContainer' id=specificRange>
+            <input type="range" min="0" max="1742" value="0" step="1" class="slider" id="specificSlider">
+        </div> -->
     </div>
 </body>
 
-<script src="DataSet.js"></script>
-<script src="HelperFunctions.js"></script>
+<script src="Heatmap/HMDataSet.js"></script>
+<script src="Util/HelperFunctions.js"></script>
 <script> //map initialisation
     var point1 = L.latLng(1.334227, 103.955138),
         point3 = L.latLng(1.331125, 103.955138),
         point2 = L.latLng(1.334227, 103.961874);
-    bounds = L.latLngBounds(point2, point3);
+    var bounds = L.latLngBounds(point2, point3);
 
     var mymap = L.map('mapid', {
         center: [1.332469, 103.957427],
@@ -94,7 +145,7 @@
         minZoom: 18.4,
     }).addTo(mymap);
 
-    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    // L.tileLayer('https://api.tiles.mapbox.c../{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     //     maxZoom: 22,
     //     minZoom: 17.5,
@@ -170,27 +221,19 @@
         var startTime = parseDateTime(parseInt(values[0]));
         var endTime = parseDateTime(parseInt(values[1]));
         var intensity = 1/(values[1] - values[0] + 1);
-        var smin;
-        var shour;
-        if (startTime.min < 10) {
-            smin = "0" + startTime.min;
-        } else {
-            smin = startTime.min.toString();
-        }
-        if (startTime.hour < 10) {
-            shour = "0" + startTime.hour;
-        } else {
-            shour = startTime.hour.toString();
-        }
-        jumpDay.value = startTime.day;
-        jumpTime.value = shour + smin;
+
+        intStartDay.value = startTime.day;
+        intStartTime.value = parseTimeString(startTime.min, startTime.hour);
+        intEndDay.value = endTime.day;
+        intEndTime.value = parseTimeString(endTime.min, endTime.hour);
         interval.value = parseInt(values[1]) - parseInt(values[0]);
+        specDay.value = startTime.day;
+        specTime.value = parseTimeString(startTime.min, startTime.hour);
 
         dataSet = [];
         alleyCount = [0, 0, 0, 0, 0, 0, 0, 0];
         parsedData.forEach(function (data) {
             var testTotal = parseMinute(data.time);
-            var latlng = [];
             if (testTotal <= values[1] && testTotal >= values[0]) {
                 alleyCount[data.alley] += data.count;
                 data.coordinates[2] = intensity;
@@ -210,22 +253,68 @@
             $(".eventTitle").html("Tyre Expo Asia 2019  |  Day " + startTime.day + " - " 
                 + endTime.day);
         }
-        
     }
 
     $( function() {
-        $( "#slider" ).slider({
+        $( "#intervalSlider" ).slider({
         range: true,
         min: 0,
         max: 1742,
         values: [ 0, 0 ],
         change: function(event, ui) {
             update(ui.values);
+            if (hasInterval) {
+                $("#specificSlider").slider("value", ui.values[0]);
+            }
+        },
+        slide: function(event, ui) {
+            update(ui.values);
+            if (hasInterval) {
+                $("#specificSlider").slider("value", ui.values[0]);
+            }
         }
         });
     } );
 
+    $( function() {
+        $( "#specificSlider" ).slider({
+        min: 0,
+        max: 1742,
+        value: 0,
+        change: function(event, ui) {
+            if (!hasInterval) {
+                $("#intervalSlider").slider("values", [ui.value, ui.value]);
+            }
+        },
+        slide: function(event, ui) {
+            if (!hasInterval) {
+                $("#intervalSlider").slider("values", [ui.value, ui.value]);
+            }
+        },
+        });
+    } );
+
     // var slider = document.getElementById("slider");
+    var hasInterval = false;
+    $("#intervalControls").hide();
+    $("#intervalSlider").hide();
+    var intervalToggle = document.getElementById("intervalToggle");
+    intervalToggle.onclick = function() {
+        if (hasInterval) {
+            $("#intervalControls").hide();
+            $("#specificControls").show();
+            $("#intervalSlider").hide();
+            $("#specificSlider").show();
+            resetInterval(0);
+        } else {
+            $("#specificControls").hide();
+            $("#intervalControls").show();
+            $("#specificSlider").hide();
+            $("#intervalSlider").show();
+            resetInterval(60);
+        }
+        hasInterval = !hasInterval;
+    };    
 
     var play = document.getElementById("toggleIcon");
     var isPlaying = false;
@@ -308,56 +397,62 @@
         nextDay.src = "../icon/next.svg";
     }
 
-    var jump = document.getElementById("jump");
-    var jumpDay = document.getElementById("jumpDay");
-    var jumpTime = document.getElementById("jumpTime");
+    var intStartDay = document.getElementById("intStartDay");
+    var intStartTime = document.getElementById("intStartTime");
+    var intEndDay = document.getElementById("intEndDay");
+    var intEndTime = document.getElementById("intEndTime");
     var interval = document.getElementById("interval");
+    var specDay =  document.getElementById("specDay");
+    var specTime =  document.getElementById("specTime");
 
-    jump.onclick = function () {
-        let newDay = jumpDay.value;
-        let newTime = parseInt(jumpTime.value);
-        let newHour = Math.floor(newTime / 100);
-        let newMin = newTime % 100;
-        let newInterval = parseInt(interval.value);
-        if (newInterval >= 0 && newInterval <= 1742) {
-            if (newDay <= 3 && newDay >= 1) {
-                if (newHour <= 18 && newHour >= 8) {
-                    if (newMin <= 59 && newMin >= 0) {
-                        // var difference = $("#slider").slider("values",1) - $("#slider").slider("values",0)                    
-                        var newValue = (newDay - 1) * 601 + (newHour - 8) * 60 + newMin;
-                        $("#slider").slider("values",0, newValue);
-                        if (newValue + newInterval <= 1742) {
-                            $("#slider").slider("values",1, newValue + newInterval);
-                        } else {
-                            $("#slider").slider("values",1, 1742);
-                        } 
-                    }
-                }
-            }
-        }
-    };
-
-    jumpDay.addEventListener("keyup", function(event) {
+    intStartDay.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            jump.click();
+            changeStartTime();
         }
     });
 
-    jumpTime.addEventListener("keyup", function(event) {
+    intStartTime.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            jump.click();
+            changeStartTime();
+        }
+    });
+
+    intEndDay.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            changeEndTime();
+        }
+    });
+
+    intEndTime.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            changeEndTime();
         }
     });
 
     interval.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            jump.click();
+            changeInterval();
         }
     });
 
+    specDay.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            changeSpecTime();
+        }
+    });
+
+    specTime.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            changeSpecTime();
+        }
+    });
     
 
 </script>
