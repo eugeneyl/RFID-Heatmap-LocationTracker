@@ -5,14 +5,14 @@
 function stepUp(steps) {
     var increment = parseInt(steps);
     var values = $( "#intervalSlider" ).slider( "values" );
-    if (increment + values[1] <= 1742) {
+    if (increment + values[1] <= TOTAL_MINUTE) {
         $( "#intervalSlider" ).slider("values", [values[0]+increment, values[1]+increment]);
         $("#specificSlider").slider("value", values[0]+increment);
         return $("#intervalSlider").slider("values",1);
     } else {
-        $( "#intervalSlider" ).slider("values", [values[0]+increment, 1742]);
+        $( "#intervalSlider" ).slider("values", [values[0]+increment, TOTAL_MINUTE]);
         $("#specificSlider").slider("value", values[0]+increment);
-        return 1742;
+        return TOTAL_MINUTE;
     }
 }
 
@@ -35,11 +35,11 @@ function stepDown(steps) {
  * Convert total minutes to an object with day, date, hour and minute.
  */
 function parseDateTime(totalMinutes) {
-    var dayMinute = totalMinutes % 601;
+    var dayMinute = totalMinutes % MINUTE_PER_DAY;
     var dateTime = {
-        day: Math.floor(totalMinutes / 601) + 1,
-        date: Math.floor(totalMinutes / 601) + 19,
-        hour: Math.floor(dayMinute / 60) + 8,
+        day: Math.floor(totalMinutes / MINUTE_PER_DAY) + 1,
+        date: Math.floor(totalMinutes / MINUTE_PER_DAY) + FIRST_DAY,
+        hour: Math.floor(dayMinute / 60) + START_HOUR,
         min: dayMinute % 60
     };
     return dateTime;
@@ -52,7 +52,7 @@ function parseMinute (time) {
     var date = time.getDate();
     var hour = time.getHours();
     var min = time.getMinutes();
-    var totalMinutes = (date-19)*601 + (hour-8)*60 + min;
+    var totalMinutes = (date-FIRST_DAY)*MINUTE_PER_DAY + (hour-START_HOUR)*60 + min;
     return totalMinutes;
 }
 
@@ -77,11 +77,11 @@ function changeStartTime() {
     let newTime = parseInt(intStartTime.value);
     let newHour = Math.floor(newTime / 100);
     let newMin = newTime % 100;
-    if (newDay <= 3 && newDay >= 1) {
-        if (newHour <= 18 && newHour >= 8) {
+    if (newDay <= NO_DAYS && newDay >= 1) {
+        if (newHour <= END_HOUR && newHour >= START_HOUR) {
             if (newMin <= 59 && newMin >= 0) {
                 var difference = $("#intervalSlider").slider("values",1) - $("#intervalSlider").slider("values",0);
-                var newValue = (newDay - 1) * 601 + (newHour - 8) * 60 + newMin;
+                var newValue = (newDay - 1) * MINUTE_PER_DAY + (newHour - START_HOUR) * 60 + newMin;
                 console.log(newValue + difference);
                 $("#intervalSlider").slider("values",0, newValue);
                 if (newValue + difference <= 1742) {
@@ -99,11 +99,11 @@ function changeEndTime() {
     let newTime = parseInt(intEndTime.value);
     let newHour = Math.floor(newTime / 100);
     let newMin = newTime % 100;
-    if (newDay <= 3 && newDay >= 1) {
-        if (newHour <= 18 && newHour >= 8) {
+    if (newDay <= NO_DAYS && newDay >= 1) {
+        if (newHour <= END_HOUR && newHour >= START_HOUR) {
             if (newMin <= 59 && newMin >= 0) {
-                var newValue = (newDay - 1) * 601 + (newHour - 8) * 60 + newMin;
-                if (newValue > $("#intervalSlider").slider("values",0) && newValue < 1742) {
+                var newValue = (newDay - 1) * MINUTE_PER_DAY + (newHour - START_HOUR) * 60 + newMin;
+                if (newValue > $("#intervalSlider").slider("values",0) && newValue < TOTAL_MINUTE) {
                     $("#intervalSlider").slider("values",1, newValue);
                 }
             }
@@ -114,10 +114,10 @@ function changeEndTime() {
 function changeInterval() {
     let newInterval = parseInt(interval.value);
     let newEndValue = $("#intervalSlider").slider("values",0) + newInterval;
-    if (newEndValue < 1742) {
+    if (newEndValue < TOTAL_MINUTE) {
         $("#intervalSlider").slider("values",1, newEndValue);
     } else {
-        $("#intervalSlider").slider("values",1, 1742);
+        $("#intervalSlider").slider("values",1, TOTAL_MINUTE);
     }
 }
 
@@ -131,10 +131,10 @@ function changeSpecTime() {
     let newTime = parseInt(specTime.value);
     let newHour = Math.floor(newTime / 100);
     let newMin = newTime % 100;
-    if (newDay <= 3 && newDay >= 1) {
-        if (newHour <= 18 && newHour >= 8) {
+    if (newDay <= NO_DAYS && newDay >= 1) {
+        if (newHour <= END_HOUR && newHour >= START_HOUR) {
             if (newMin <= 59 && newMin >= 0) {
-                var newValue = (newDay - 1) * 601 + (newHour - 8) * 60 + newMin;
+                var newValue = (newDay - 1) * MINUTE_PER_DAY + (newHour - START_HOUR) * 60 + newMin;
                 $("#specificSlider").slider("value", newValue);
             }
         }

@@ -5,9 +5,15 @@
     overflow: hidden;
 } */
 
+html, body {
+  height: 100%;
+  min-height: 100% !important;
+}
+
 #mapWrapper { 
-  width: 1024px;
-  height: 586px;
+  width: 100%;
+  min-width: 1024px;
+  height: 100%;
   margin-bottom: 0 !important;
   overflow: hidden;
   position: relative;
@@ -18,11 +24,43 @@
   height: 100%;
 }
 
+#legend-wrapper {
+  position: absolute;
+  bottom: 33%;
+  height: 200px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.legend {
+  width: 70px;
+  height: 100%;
+  background: #F5F5F5;
+  border: 1px solid #707070;
+  border-radius: 3.5px;
+  font-family: "Montserrat";
+  font-size: auto;
+}
+
+.legendBar {
+  width: 10px;
+  height: 90%;
+  margin: 10px 4px;
+  border: 1px solid #707070;
+  float:left;
+  background-image: linear-gradient(red, lime, blue, white)
+}
+
+.legendTextContainer {
+  font-size:10px;
+  height: 90%;
+  margin: 20% 4px;
+}
+
 #button-wrapper {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  width: 100%;
   z-index: 1000;
 }
 
@@ -32,18 +70,23 @@
   border-radius: 15.5px;
   background: #F5F5F5;
   border: 1px solid #707070;
+  font-family: "Montserrat";	
 }
 
 .timeControls {
   padding: 0;
   height: 73px;	
-  width: 1442px;	
+  width: 99.5%;
+  min-width: 1442px;	
   background-color: #0F0F0F;
 }
 
 .bottomControls {	
-    height: 60px;	
-    width: 465px;	
+    height: 100%;
+    min-height: 60px;
+    /* height: 60px; */
+    width: 45%;	
+    min-width: 465px;	
     background-color: #0F0F0F;
     color: white;
     float: left;
@@ -166,34 +209,39 @@
 }
 
 .eventBox {
-	height: 60px;
-	width: 465px;
+  height: 100%;
+  min-height: 60px;
+  width: 45%;	
+	min-width: 465px;
 	opacity: 0.90;
-    background-color: #0F0F0F;
-    float: left;
+  background-color: #0F0F0F;
+  float: left;
 }
 
 .eventTitle {	
     height: 33px;	
-    width: 496px;	
-	color: #FFFFFF;	
+    width: 496px;
+	  color: #FFFFFF;	
     font-family: "Montserrat";
     font-weight: 600;
     font-size: 27px;	
-	letter-spacing: -0.63px;
-	line-height: 33px;
+	  letter-spacing: -0.63px;
+	  line-height: 33px;
     display: inline-block;
     padding: 15px 387px 12px 27px;
 }
 
 .topControls {
-    height: 60px;	
-    width: 559px;	
+    height: 8.5%;
+    min-height: 60px;
+    min-width: 559px;
+    width: 54.5%;	
     background-color: #0F0F0F;
     opacity: 0.9;
     color: white;
     display: inline-block;
     position: absolute;
+    overflow: hidden;
 }
 
 .ControlsContainer {
@@ -268,7 +316,7 @@
 
 .check {
     height: 34px;
-	width: 86px;
+	  width: 86px;
     background-color: #0D6FFB;	
     color: #FFFFFF;	
     font-family: "Montserrat";
@@ -290,17 +338,22 @@
 }
 
 .sliderContainer{
-    height: 60px;	
-    width: 559px;
+    height: 8.5%;
+    min-height: 60px;
+    /* height: 60px; */
+    width: 54.5%;	
+    min-width: 559px;
     background-color: #0F0F0F;
     color: #1E2C3F;	
     display: inline-block;
     position: absolute;
+    overflow: hidden;
 }
 
 .sliderRange {
     -webkit-appearance: none;
-    width: 507px;
+    width: 95%;
+    min-width: 507px;
     height: 3px;
     border-radius: 16px;
     outline: none;
@@ -310,24 +363,49 @@
     margin: 28px 26px;
   }
 
-/* .specificRange {
-  -webkit-appearance: none;
-  width: 507px;
-  height: 3px;
-  border-radius: 16px;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-  margin: 28px 26px;
-}
-
-.specificRange::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%; 
-    background: #D8D8D8;
-    cursor: pointer;
-} */
+  /* Loader style */
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #f5b500;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Add animation to "page content" */
+  .animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+  
+  @-webkit-keyframes animatebottom {
+    from { bottom:-100px; opacity:0 } 
+    to { bottom:0px; opacity:1 }
+  }
+  
+  @keyframes animatebottom { 
+    from{ bottom:-100px; opacity:0 } 
+    to{ bottom:0; opacity:1 }
+  }

@@ -19,8 +19,9 @@
 
 <link rel="stylesheet" href="../styles/locationTracker.css" />
 
-<body>
-    <div>
+<body onload = "showDisplay()" style = "margin:0;">
+    <div id="loader"></div>
+    <div id ="myDiv" style = "visibility: hidden">
         <div id=mapWrapper>
             <div id="mapid"></div>
             <div id="button-wrapper">
@@ -36,17 +37,17 @@
                 <span id="attendeeName" class="nameText"></span></br>
                 <span id="attendeeID" class="idText"></span>
             </div>
-            <div>
+            <div class="playContainer">
                 <img id="play" class="play" src="../icon/tracker_play.svg" title="Play" />
             </div>
             <div id="summaryPanel" class="summaryPanel">
                 <span id="summaryHeader" class="controlBoxText"></span></br>
-                <span id="noAlley" class="controlBoxText"></span></br>
+                <span id="noArea" class="controlBoxText"></span></br>
                 <span id="mostVisited" class="controlBoxText"></span>
             </div>
             <div id="recordsTable" class="recordsTable">
-                <table id="table" style="width:100%; border-collapse:collapse">
-                    <tbody id=>
+                <table id="table" style="width:100%; border-collapse:collapse; border: 1px solid #707070">
+                    <tbody>
                     </tbody>
                 </table>
             </div>
@@ -54,357 +55,15 @@
     </div>
 </body>
 
-<script src="LocationTracker/LTDataSet.js"></script>
-<script src="LocationTracker/AutocompleteList.js"></script>
-<script> //Parsing data
-    function parseTimeString(min, hour) {
-        var smin;
-        var shour;
-        if (min < 10) {
-            smin = "0" + min;
-        } else {
-            smin = min.toString();
-        }
-        if (hour < 10) {
-            shour = "0" + hour;
-        } else {
-            shour = hour.toString();
-        }
-        return shour + smin;
+<script src="Dataset/dataset.js"></script>
+<script src="Util/HelperFunctions.js"></script>
+<script src="UserInput.js"></script>
+<script> //load screen
+    function showDisplay() {
+        document.getElementById("loader").style.visibility = "none";
+        document.getElementById("myDiv").style.visibility = "visible";
     }
-
-    var parsedData = [];
-
-    rawData.forEach(function (data) {
-        var dateTime = new Date(data.captured_time_minute);
-        var day = parseInt(dateTime.getDate()) - 18;
-        var hour = dateTime.getHours();
-        var min = dateTime.getMinutes();
-        var timeString = parseTimeString(min, hour);
-        var shownTime = "Day " + day + ", " + timeString;
-
-        var alley = -1;
-        if (data.location == "Alley 1") {
-            alley = 0;
-        } else if (data.location == "Alley 2") {
-            alley = 1;
-        } else if (data.location == "Alley 3") {
-            alley = 2;
-        } else if (data.location == "Alley 4") {
-            alley = 3;
-        } else if (data.location == "Alley 5") {
-            alley = 4;
-        } else if (data.location == "Alley 6") {
-            alley = 5;
-        } else if (data.location == "Alley 7") {
-            alley = 6;
-        } else if (data.location == "Alley 8") {
-            alley = 7;
-        }
-        parsedData.push({
-            "time": shownTime,
-            "day": day,
-            "hour": hour,
-            "min": min,
-            "id": data.tag,
-            "name": data.person,
-            "alley": alley
-        });
-    });
 </script>
-<script> //map initialisation
-    var point1 = L.latLng(1.334227, 103.955138),
-        point3 = L.latLng(1.331125, 103.955138),
-        point2 = L.latLng(1.334227, 103.961874);
-    var bounds = L.latLngBounds(point2, point3);
-
-    var mymap = L.map('mapid', {
-        center: [1.332469, 103.957427],
-        zoom: 18.42,
-        // maxBounds: bounds
-    });
-
-    mymap.setMaxBounds(bounds);
-
-    L.tileLayer('', {
-        'attribution': 'Map data &copy; OpenStreetMap contributors',
-        maxZoom: 22,
-        minZoom: 18.4,
-    }).addTo(mymap);
-
-    var overlay = L.imageOverlay.rotated("../icon/Map.svg", point1, point2, point3, {
-        opacity: 1,
-        interactive: true,
-        attribution: "Floor plan of tyreexpo"
-    }).addTo(mymap);
-
-    var alleyCoordinates = [
-        { "alley": 1, "lat": 1.333277, "long": 103.956274 },
-        { "alley": 2, "lat": 1.332569, "long": 103.956542 },
-        { "alley": 3, "lat": 1.331904, "long": 103.956542 },
-        { "alley": 4, "lat": 1.331877, "long": 103.957272 },
-        { "alley": 5, "lat": 1.331893, "long": 103.958575 },
-        { "alley": 6, "lat": 1.332569, "long": 103.958441 },
-        { "alley": 7, "lat": 1.333239, "long": 103.958151 },
-        { "alley": 8, "lat": 1.332869, "long": 103.957331 },
-    ];
-
-    var pointList = [];
-    for (var i = 0; i < 8; i++) {
-        var point = L.latLng(alleyCoordinates[i].lat, alleyCoordinates[i].long);
-        pointList.push(point);
-    }
-
-
-</script>
-<script>
-    function iterateRecords() {
-        var queryResult = [];
-        var alleyCount = [];
-        for (var i = 0; i < 8; i++) {
-            alleyCount.push({
-                "number": i,
-                "count": 0
-            });
-        }
-        var attendeeName;
-        var attendeeId;
-        parsedData.forEach(function (data) {
-            if (data.id == search.value
-                || data.name.toLowerCase() == search.value.toLowerCase()) {
-                queryResult.push({
-                    "time": data.time,
-                    "alley": data.alley
-                })
-                attendeeName = data.name.toLowerCase();
-                attendeeId = data.id;
-                alleyCount[data.alley].count++;
-            }
-        });
-        if (queryResult.length == 0) {
-            alert("Name/ID not found.");
-            return;
-        }
-        $('tbody').html("");
-        addHeader();
-        queryResult.forEach(function (data) {
-            addRow(data);
-        });
-
-        $("#attendeeName").html("Name: <b>" + attendeeName + "</b>");
-        $("#attendeeID").html("ID: <b>" + attendeeId + "</b>");
-        var noAlley = 0;
-
-        alleyCount.sort(function (a, b) {
-            return b.count - a.count;
-        });
-
-        var frequent = alleyCount[0].number + 1;
-        for (var i = 0; i < 8; i++) {
-            if (alleyCount[i].count > 0) {
-                noAlley++;
-            }
-            if (i != 0 && alleyCount[i].count == alleyCount[0].count) {
-                var alley = alleyCount[i].number + 1;
-                frequent = frequent + ", " + alley;
-            }
-        }
-        $(".play").css('visibility', 'visible');
-        $("#summaryHeader").html("<b>Summary</>");
-        $("#noAlley").html("Number of visited alleys: <b>" + noAlley + "</b>");
-        $("#mostVisited").html("Most frequently visited alley: <b>" + frequent + "</b>");
-
-        var play = document.getElementById("play");
-        var isPlaying = false;
-        var table = document.getElementById("table");
-
-        for (var i = 1; i < table.rows.length; i++) {
-            var marker;
-            table.rows[i].onmouseenter = function () {
-                if (!isPlaying) {
-                    table.rows[this.rowIndex].style.background = "#D3D3D3";
-                    var rowIndex = this.rowIndex - 1;
-                    marker = L.marker(pointList[queryResult[rowIndex].alley]).addTo(mymap);
-                }
-            }
-            table.rows[i].onmouseleave = function () {
-                if (!isPlaying) {
-                    mymap.closePopup(marker);
-                    table.rows[this.rowIndex].style.background = "#ffffff"
-                }
-            }
-        }
-
-        play.onclick = function () {
-            if (isPlaying) {
-                play.src = "../icon/tracker_play.svg";
-            } else {
-                play.src = "../icon/tracker_stop.svg";
-            }
-            isPlaying = !isPlaying;
-            var marker;
-            var counter = 1;
-            var interval = setInterval(function () {
-                if (counter < table.rows.length && isPlaying) {
-                    if (counter != 1) {
-                        table.rows[counter - 1].style.background = "#ffffff"
-                    }
-                    mymap.closePopup(marker);
-                    var rowIndex = counter - 1;
-                    marker = L.marker(pointList[queryResult[rowIndex].alley]).addTo(mymap);
-                    table.rows[counter].style.background = "#D3D3D3";
-                    counter++;
-                } else {
-                    table.rows[counter - 1].style.background = "#ffffff"
-                    mymap.closePopup(marker);
-                    clearInterval(interval);
-                    isPlaying = false;
-                    play.src = "../icon/tracker_play.svg";
-                }
-            }, 500);
-        }
-
-    }
-
-    function addRow(data) {
-        if (!document.getElementsByTagName) return;
-        var tabBody = document.getElementsByTagName("tbody").item(0);
-        var row = document.createElement("tr");
-        row.className = "bodyrow";
-        var cell1 = document.createElement("td");
-        var cell2 = document.createElement("td");
-        var textnode1 = document.createTextNode(data.time);
-        var textnode2 = document.createTextNode(data.alley + 1);
-        cell1.appendChild(textnode1);
-        cell2.appendChild(textnode2);
-        row.appendChild(cell1);
-        row.appendChild(cell2);
-        tabBody.appendChild(row);
-    }
-
-    function addHeader() {
-        if (!document.getElementsByTagName) return;
-        var tabBody = document.getElementsByTagName("tbody").item(0);
-        var row = document.createElement("tr");
-        var cell1 = document.createElement("th");
-        var cell2 = document.createElement("th");
-        var textnode1 = document.createTextNode("Time");
-        var textnode2 = document.createTextNode("Alley");
-        cell1.appendChild(textnode1);
-        cell2.appendChild(textnode2);
-        row.appendChild(cell1);
-        row.appendChild(cell2);
-        tabBody.appendChild(row);
-    }
-
-    function autocomplete(inp, arr) {
-        /*the autocomplete function takes two arguments,
-        the text field element and an array of possible autocompleted values:*/
-        var currentFocus;
-        /*execute a function when someone writes in the text field:*/
-        inp.addEventListener("input", function (e) {
-            var a, b, i, val = this.value;
-            /*close any already open lists of autocompleted values*/
-            closeAllLists();
-            if (!val) { return false; }
-            currentFocus = -1;
-            /*create a DIV element that will contain the items (values):*/
-            a = document.createElement("DIV");
-            a.setAttribute("id", this.id + "autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
-            /*append the DIV element as a child of the autocomplete container:*/
-            this.parentNode.appendChild(a);
-            /*for each item in the array...*/
-            for (i = 0; i < arr.length; i++) {
-                /*check if the item starts with the same letters as the text field value:*/
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                    /*create a DIV element for each matching element:*/
-                    b = document.createElement("DIV");
-                    /*make the matching letters bold:*/
-                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                    b.innerHTML += arr[i].substr(val.length);
-                    /*insert a input field that will hold the current array item's value:*/
-                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                    /*execute a function when someone clicks on the item value (DIV element):*/
-                    b.addEventListener("click", function (e) {
-                        /*insert the value for the autocomplete text field:*/
-                        inp.value = this.getElementsByTagName("input")[0].value;
-                        iterateRecords();
-                        /*close the list of autocompleted values,
-                        (or any other open lists of autocompleted values:*/
-                        closeAllLists();
-                    });
-                    a.appendChild(b);
-                }
-            }
-        });
-        /*execute a function presses a key on the keyboard:*/
-        inp.addEventListener("keydown", function (e) {
-            var x = document.getElementById(this.id + "autocomplete-list");
-            if (x) x = x.getElementsByTagName("div");
-            if (e.keyCode == 40) {
-                /*If the arrow DOWN key is pressed,
-                increase the currentFocus variable:*/
-                currentFocus++;
-                /*and and make the current item more visible:*/
-                addActive(x);
-            } else if (e.keyCode == 38) { //up
-                /*If the arrow UP key is pressed,
-                decrease the currentFocus variable:*/
-                currentFocus--;
-                /*and and make the current item more visible:*/
-                addActive(x);
-            } else if (e.keyCode == 13) {
-                /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                e.preventDefault();
-                if (currentFocus > -1) {
-                    /*and simulate a click on the "active" item:*/
-                    if (x) x[currentFocus].click();
-                }
-            }
-        });
-        function addActive(x) {
-            /*a function to classify an item as "active":*/
-            if (!x) return false;
-            /*start by removing the "active" class on all items:*/
-            removeActive(x);
-            if (currentFocus >= x.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (x.length - 1);
-            /*add class "autocomplete-active":*/
-            x[currentFocus].classList.add("autocomplete-active");
-        }
-        function removeActive(x) {
-            /*a function to remove the "active" class from all autocomplete items:*/
-            for (var i = 0; i < x.length; i++) {
-                x[i].classList.remove("autocomplete-active");
-            }
-        }
-        function closeAllLists(elmnt) {
-            /*close all autocomplete lists in the document,
-            except the one passed as an argument:*/
-            var x = document.getElementsByClassName("autocomplete-items");
-            for (var i = 0; i < x.length; i++) {
-                if (elmnt != x[i] && elmnt != inp) {
-                    x[i].parentNode.removeChild(x[i]);
-                }
-            }
-        }
-        /*execute a function when someone clicks in the document:*/
-        document.addEventListener("click", function (e) {
-            closeAllLists(e.target);
-        });
-    }
-
-
-    autocomplete(document.getElementById("searchID"), parsedNameList);
-
-    var search = document.getElementById("searchID");
-    search.addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            iterateRecords();
-        }
-    });
-
-
-</script>
+<script src ="Util/MapInitialisation.js"></script>
+<script src ="Util/MapAdjustment.js"></script>
+<script src ="LocationTracker/LocationTracker.js"></script>
