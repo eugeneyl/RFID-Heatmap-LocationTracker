@@ -12,9 +12,9 @@ if (ADJUSTING_FLOORPLAN){
     marker3.on('drag dragend', repositionImage);
 
     function getPoints(e) {
-        alert("point 1: " + marker1.getLatLng() + "\r\n" +
-              "point 2: " + marker2.getLatLng() + "\r\n" +
-              "point 3: " + marker3.getLatLng() + "\r\n" );
+        alert("point 1: " + marker1.getLatLng() + "  " +
+              "point 2: " + marker2.getLatLng() + "  " +
+              "point 3: " + marker3.getLatLng() + "  " );
     }
     mymap.on('click', getPoints);    
 }
@@ -32,7 +32,7 @@ if (FINDING_CENTER) {
 // For getting specific coordinates
 if (FINDING_COORDINATES) {
     function getPoint(e) {
-        alert("lat: " + e.latlng.lat.toFixed(6) + "\r\n" + "long: " + e.latlng.lng.toFixed(6));
+        alert("lat: " + e.latlng.lat.toFixed(6) + "  " + "long: " + e.latlng.lng.toFixed(6));
     }
     mymap.on('click', getPoint);
 }
