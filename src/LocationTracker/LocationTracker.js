@@ -4,7 +4,7 @@ var parsedNameList = new Set();
 
 rawData.forEach(function (data) {
     var dateTime = new Date(data.captured_time_minute);
-    var day = parseInt(dateTime.getDate()) - 16;
+    var day = parseInt(dateTime.getDate()) - FIRST_DAY + 1;
     var hour = dateTime.getHours();
     var min = dateTime.getMinutes();
     var timeString = parseTimeString(min, hour);

@@ -61,7 +61,7 @@ for (var i = 0; i < AREA_COORDINATES.length; i++) {
 var startTime = parseDateTime(parseInt(0));
 var endTime = parseDateTime(parseInt(0));
 var MINUTE_PER_DAY = (END_HOUR - START_HOUR) * 60 + 1;
-var TOTAL_MINUTE = MINUTE_PER_DAY * 3 - 1;
+var TOTAL_MINUTE = MINUTE_PER_DAY * NO_DAYS - 1;
 
 var intStartDay = document.getElementById("intStartDay");
 var intStartTime = document.getElementById("intStartTime");
