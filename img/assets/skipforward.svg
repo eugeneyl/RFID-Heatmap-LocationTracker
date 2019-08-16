@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="27px" viewBox="0 0 25 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>skip_forward</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="heatmap_controls" transform="translate(-220.000000, -91.000000)" stroke="#FFFFFF" stroke-width="3">
+            <g id="skip_forward" transform="translate(233.617009, 103.617009) rotate(45.000000) translate(-233.617009, -103.617009) translate(222.617009, 91.117009)">
+                <path d="M11,3 C4.92486775,3 1.19583386e-15,7.92486775 0,14 C-1.19583386e-15,20.0751322 4.92486775,25 11,25 C17.0751322,25 22,20.0751322 22,14" id="Path"></path>
+                <polyline id="Path" points="10 7 14 2.94976452 10.1052632 -1"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
